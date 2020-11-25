@@ -1,0 +1,69 @@
+"""
+***************************
+@Project :csdn
+
+@Author :majun
+@Date : 2020/11/16 9:47
+
+*******************************
+"""
+from peewee import *
+
+db = MySQLDatabase("training", host="172.16.26.1", port=3306, user="majun", password="wjewofdsf")
+
+
+class BaseModel(Model):
+    class Meta:
+        database = db
+
+
+class topic(BaseModel):
+    topic_id = CharField(primary_key=True, max_length=50)  # 文章ID
+    title = TextField(default="")  # 文章标题
+    topic_status = CharField(max_length=50)  # 文章状态,已解决/未解决
+    score = IntegerField()  # 文章的赏分
+    author_id = CharField(max_length=100)  # 作者ID
+    create_time = DateTimeField()  # 文章创建时间
+    answer_nums = IntegerField()  # 文章评论数
+    click_nums = IntegerField()  # 文章点击率
+    last_action_time = DateTimeField()  # 文章最后一次活动时间
+    content = TextField()  # 文章内容
+    jtl = FloatField(default=0.0)  # 文章结贴率
+    like_nums = IntegerField(default=0)  # 文章点赞数
+    add_time = DateTimeField(index=True, null=True)  # 数据插入时间
+    update_time = DateTimeField(index=True, null=True)  # 数据更新时间
+
+
+class answer(BaseModel):
+    answer_id = CharField(primary_key=True, max_length=50)  # 评论ID
+    topic_id = CharField(max_length=50)  # 评论的文章ID
+    user_id = CharField(max_length=50)  # 评论的用户ID
+    create_time = DateTimeField()  # 评论创建时间
+    content = TextField()  # 评论内容
+    like_nums = IntegerField(default=0)  # 评论点赞数
+    add_time = DateTimeField(index=True, null=True)  # 数据插入时间
+    update_time = DateTimeField(index=True, null=True)  # 数据更新时间
+
+
+class user(BaseModel):
+    user_id = CharField(max_length=50, primary_key=True)  # 用户id
+    name = CharField(max_length=200)  # 用户名
+    title = TextField()  # blog的title
+    desc = TextField()  # 描述
+    code_year = IntegerField(default=0)  # 码龄
+    original_num = IntegerField(default=0)  # 原创数
+    week_rank = IntegerField(default=0)  # 周排名
+    total_rank = IntegerField(default=0)  # 总排名
+    views = IntegerField(default=0)  # 访问量
+    level = IntegerField(default=0)  # 等级
+    points = IntegerField(default=0)  # 积分
+    fans_nums = IntegerField(default=0)  # 粉丝数
+    like_nums = IntegerField(default=0)  # 点赞数
+    review_nums = IntegerField(default=0)  # 评论数
+    favorites = IntegerField(default=0)  # 收藏数
+    add_time = DateTimeField(index=True, null=True)  # 数据插入时间
+    update_time = DateTimeField(index=True, null=True)  # 数据更新时间
+
+
+if __name__ == "__main__":
+    db.create_tables([topic, answer, user])
